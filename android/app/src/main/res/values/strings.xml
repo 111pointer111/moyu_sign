@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_description">摸鱼签桌面小组件，显示今日摸鱼次数</string>
+    <string name="widget_description_small">摸鱼签小组件 - 简洁计数</string>
+    <string name="widget_description_medium">摸鱼签中组件 - 计数与提示</string>
+    <string name="widget_description_large">摸鱼签大组件 - 完整功能</string>
+</resources>
