@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:moyu_sign/core/constants.dart';
 import 'package:moyu_sign/core/theme.dart';
 import 'package:moyu_sign/features/card/domain/card_service.dart';
+import 'package:moyu_sign/features/card/domain/audio_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// 摸鱼签主页
@@ -12,8 +13,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CardScreen extends ConsumerStatefulWidget {
   final CardService cardService;
+  final AudioService audioService;
 
-  const CardScreen({super.key, required this.cardService});
+  const CardScreen({
+    super.key,
+    required this.cardService,
+    required this.audioService,
+  });
 
   @override
   ConsumerState<CardScreen> createState() => _CardScreenState();
@@ -25,6 +31,7 @@ class _CardScreenState extends ConsumerState<CardScreen>
   String? _currentMessage; // 当前祝福语
   bool _isAnimating = false;
   bool _isCooldown = false;
+  bool _isSoundEnabled = true; // 声音开关状态
   Timer? _cooldownTimer;
   Timer? _refreshTimer; // 定期刷新计数的 Timer
   int _count = 0; // 本地缓存计数
@@ -52,6 +59,7 @@ class _CardScreenState extends ConsumerState<CardScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _count = widget.cardService.getTodayCount();
+    _isSoundEnabled = widget.audioService.isSoundEnabled;
 
     // 每秒检查一次计数变化（用于组件点击后同步）
     _refreshTimer = Timer.periodic(const Duration(seconds: 1), (_) {
@@ -138,6 +146,9 @@ class _CardScreenState extends ConsumerState<CardScreen>
 
   void _onTap() {
     if (_isAnimating || _isCooldown || _isTriggered) return;
+
+    // 播放敲击音效
+    widget.audioService.playWoodenFishTap();
 
     // 木鱼点击动画
     _fishTapController.forward().then((_) {
@@ -238,22 +249,52 @@ class _CardScreenState extends ConsumerState<CardScreen>
                 // 顶部标题
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
-                  child: Column(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        '摸鱼签',
-                        style:
-                            Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                  color: AppTheme.woodBrown,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '敲木鱼，积功德，摸鱼也要有仪式感',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppTheme.woodBrown.withOpacity(0.6),
+                      const SizedBox(width: 48), // 占位，保持标题居中
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text(
+                              '摸鱼签',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineLarge
+                                  ?.copyWith(
+                                    color: AppTheme.woodBrown,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '敲木鱼，积功德，摸鱼也要有仪式感',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    color:
+                                        AppTheme.woodBrown.withOpacity(0.6),
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // 声音开关按钮
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            widget.audioService.toggleSound();
+                            _isSoundEnabled =
+                                widget.audioService.isSoundEnabled;
+                          });
+                        },
+                        icon: Icon(
+                          _isSoundEnabled
+                              ? Icons.volume_up
+                              : Icons.volume_off,
+                          color: AppTheme.woodBrown.withOpacity(0.6),
+                        ),
                       ),
                     ],
                   ),

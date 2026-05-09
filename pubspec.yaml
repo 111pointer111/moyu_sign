@@ -37,6 +37,9 @@ dependencies:
   # Local storage
   shared_preferences: ^2.2.3
 
+  # Audio playback
+  audioplayers: ^6.4.0
+
   # Home widget for Android App Widget
   home_widget: ^0.6.0
 
@@ -77,6 +80,7 @@ flutter:
     - assets/images/wooden_fish_001.jpg
     - assets/images/lazy_cat_001.jpg
     - assets/images/merit_plus_001.jpg
+    - assets/sounds/wooden_fish_tap.mp3
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

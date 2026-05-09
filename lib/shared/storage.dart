@@ -66,6 +66,16 @@ class StorageService {
     await _prefs.setStringList(keyTriggeredIndices, []);
   }
 
+  /// 获取声音开关状态
+  bool isSoundEnabled() {
+    return _prefs.getBool(keySoundEnabled) ?? true; // 默认开启
+  }
+
+  /// 设置声音开关状态
+  Future<void> setSoundEnabled(bool enabled) async {
+    await _prefs.setBool(keySoundEnabled, enabled);
+  }
+
   /// 重置今日数据（App 卸载后自动生效，因为数据跟着 SharedPreferences）
   /// 无需显式调用，SharedPreferences 本身就是持久化本地存储
 }

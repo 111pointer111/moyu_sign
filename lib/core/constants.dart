@@ -17,3 +17,9 @@ const String keyTodayCount = 'today_count';
 
 /// 存储 key：今日已触发的文案索引列表
 const String keyTriggeredIndices = 'triggered_indices';
+
+/// 存储 key：声音开关状态
+const String keySoundEnabled = 'sound_enabled';
+
+/// 音效文件路径（AssetSource 会自动添加 assets/ 前缀）
+const String soundWoodenFishTap = 'sounds/wooden_fish_tap.mp3';

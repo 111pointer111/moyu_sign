@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:moyu_sign/core/theme.dart';
 import 'package:moyu_sign/features/card/domain/card_service.dart';
+import 'package:moyu_sign/features/card/domain/audio_service.dart';
 import 'package:moyu_sign/features/card/presentation/card_screen.dart';
 import 'package:moyu_sign/shared/storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,8 +27,12 @@ class MoyuSignApp extends ConsumerWidget {
 
           final storage = StorageService(snapshot.data!);
           final cardService = CardService(storage);
+          final audioService = AudioService(storage);
 
-          return CardScreen(cardService: cardService);
+          return CardScreen(
+            cardService: cardService,
+            audioService: audioService,
+          );
         },
       ),
     );
